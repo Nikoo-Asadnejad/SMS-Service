@@ -14,7 +14,7 @@ namespace SmsService.Controllers
     {
 
       SmsInputDto input = new SmsInputDto(BaseData.SmsTypes.OPT.Id, "123",
-        BaseData.Providers.Najva.Id,
+        BaseData.Providers.KaveNegar.Id,
         new UserDto(1, "nikoo", "asad", "09393701422"));
 
       var r = await smsService.CreateSmsAsync(input);

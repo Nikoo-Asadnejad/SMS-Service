@@ -6,10 +6,11 @@ namespace SmsService.Percistance
   {
     public struct Providers
     {
-      public struct Najva
+      public struct KaveNegar
       {
         public const int Id = 1;
-        public const string Name = "Najva";
+        public const string Name = "KaveNegar";
+        public const string PhoneNumber = "10008663";
       }
 
     }

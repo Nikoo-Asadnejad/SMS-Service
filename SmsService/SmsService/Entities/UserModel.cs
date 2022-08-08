@@ -21,9 +21,6 @@ namespace SmsService.Entities
     public string LastName { get; set; }
     public string PhoneNumber { get; set; }
 
-    internal UserDto CreateUserDto()
-    {
-      throw new NotImplementedException();
-    }
+
   }
 }

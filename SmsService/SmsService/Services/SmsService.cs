@@ -1,4 +1,5 @@
 using ErrorHandlingDll.ReturnTypes;
+using MongoDB.Driver;
 using MongoRepository.Repository;
 using SmsService.Dtos.Sms;
 using SmsService.Entities;
@@ -14,14 +15,14 @@ namespace SmsService.Services
     {
       _smsRepository = smsRepository;
     }
-    public async Task<ReturnModel<string>> CreateSmsAsync(SmsInputDto sendSmsInputDto )
+    public async Task<ReturnModel<SmsModel>> CreateSmsAsync(SmsInputDto sendSmsInputDto )
     {
-      ReturnModel<string> result = new();
+      ReturnModel<SmsModel> result = new();
 
       SmsModel smsModel = sendSmsInputDto.CreateSmsModel();
       await _smsRepository.InsertAsync(smsModel);
      
-      result.CreateSuccessModel(data: smsModel.Id.ToString());
+      result.CreateSuccessModel(data: smsModel);
       return result;
     }
 
@@ -35,5 +36,18 @@ namespace SmsService.Services
       result.CreateSuccessModel(data: getSmsResultDto);
       return result;
     }
+
+    public async Task<bool> UpdateSms(SmsModel sms ,UpdateSmsDto updateSmsDto)
+    {
+      SmsModel updatedSmsModel = SmsMappers.UpdateSmsModel(sms,updateSmsDto);
+      UpdateDefinition<SmsModel> updateDefinition =  Builders<SmsModel>.Update.Set(s =>
+      s.IsSuccessfull, updatedSmsModel.IsSuccessfull);
+      
+      await _smsRepository.ReplaceOneAsync(updatedSmsModel);
+
+      return true;
+    }
+
+
   }
 }

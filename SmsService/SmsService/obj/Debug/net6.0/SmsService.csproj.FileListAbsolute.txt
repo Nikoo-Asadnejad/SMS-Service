@@ -60,3 +60,4 @@ D:\web development\projects\SMS-Service\SmsService\SmsService\obj\Debug\net6.0\r
 D:\web development\projects\SMS-Service\SmsService\SmsService\obj\Debug\net6.0\SmsService.pdb
 D:\web development\projects\SMS-Service\SmsService\SmsService\obj\Debug\net6.0\SmsService.genruntimeconfig.cache
 D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\MongoDB.Driver.dll
+D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\Kavenegar.dll

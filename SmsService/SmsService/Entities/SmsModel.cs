@@ -9,12 +9,16 @@ namespace SmsService.Entities
   [MongoCollectionAttribute("Sms")]
   public class SmsModel : MongoDocument
   {
-    public SmsModel(string content, string type, UserModel user, int providerId)
+    public SmsModel(string content, string type,int typeId, UserModel user, int providerId ,
+      string providerName , string senderPhoneNumber)
     {
       Content = content;
       Type = type;
-      User = user;
+      TypeId = typeId;
+      Receiver = user;
       ProviderId = providerId;
+      ProviderName = providerName;
+      SenderPhoneNumber = senderPhoneNumber;
     }
 
     public SmsModel()
@@ -32,13 +36,23 @@ namespace SmsService.Entities
     public int TypeId { get; set; }
 
     [BsonRequired]
-    public UserModel User { get; set; }
+    public UserModel Receiver { get; set; }
 
     [BsonRequired]
     public int ProviderId { get; set; }
 
     [BsonRequired]
     public string ProviderName { get; set; }
+
+    public bool? IsSuccessfull { get; set; }
+
+    public string SenderPhoneNumber { get; set; }
+
+    public int? Cost { get; set; }
+
+    public SendingStatusModel SendingStatus{get; set;}
+
+    public ProviderResultModel ProviderResult { get; set; }
 
 
   }

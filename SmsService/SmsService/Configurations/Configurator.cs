@@ -16,12 +16,14 @@ namespace SmsService.Configurations
       services.AddEndpointsApiExplorer();
       services.AddSwaggerGen();
 
+      services.Configure<AppSetting>(configuration);
+
       ErrorHandlingDllConfigurator.InjectServices(services, configuration);
       HttpServiceConfigurator.InjectHttpService(services);
       MongoRepositoryDllConfigurator.InjectServices(services);
 
       services.AddScoped<ISmsService, SmsService.Services.SmsService>();
-      services.AddScoped<ISendSmsService, NajvaSmsService>();
+      services.AddScoped<ISendSmsService, KaveNegarService>();
 
     }
 
