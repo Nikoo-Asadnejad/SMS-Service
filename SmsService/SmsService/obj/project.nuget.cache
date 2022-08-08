@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "BQHmpJBjTHJk5KqSmNHevjuBTnS+GmYKXxO2gvPPCGsEnhB9kQhCGnTghyWv0zEb7YOVQFUQsC4vrmwH3rz7dw==",
+  "dgSpecHash": "gKpNzY4CLm/hSKVhSydewU1iFsbk+zAqyYGSn7mXMF9u9E4+2uULg0IpvtGLHjZFtEPv62Gg6CSDjp7hprNRiQ==",
   "success": true,
   "projectFilePath": "D:\\web development\\projects\\SMS-Service\\SmsService\\SmsService\\SmsService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Asus\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
+    "C:\\Users\\Asus\\.nuget\\packages\\kavenegar\\1.2.4\\kavenegar.1.2.4.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",

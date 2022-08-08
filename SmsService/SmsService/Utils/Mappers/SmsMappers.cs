@@ -9,7 +9,7 @@ public static class SmsMappers
 {
   public static SmsModel CreateSmsModel(this SmsInputDto sendSmsInputDto)
   => new SmsModel(sendSmsInputDto.Content, BaseDataMappers.GetSmsTypeById(sendSmsInputDto.TypeId),
-                  sendSmsInputDto.User,sendSmsInputDto.ProvideId);
+                  sendSmsInputDto.User,sendSmsInputDto.ProviderId);
 
   public static SmsReturnDto CreateSmsReturnDto(this SmsModel smsModel)
     => new SmsReturnDto(smsModel.Id.ToString(), smsModel.Content,
