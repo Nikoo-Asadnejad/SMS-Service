@@ -1,2 +1,2 @@
 # SMS-Service
-A micro which sends sms messages
+A micro service which is responsible for sending sms messages
