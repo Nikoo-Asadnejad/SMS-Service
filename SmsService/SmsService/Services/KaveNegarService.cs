@@ -29,9 +29,9 @@ namespace SmsService.Services
      // _loggerService = loggerService;
     }
 
-    public async Task<ReturnModel<string>> SendSmsAsync(SmsInputDto sendSmsInputDto)
+    public async Task<ReturnModel<SendSmsReturnDto>> SendSmsAsync(SmsInputDto sendSmsInputDto)
     {
-      ReturnModel<string> result = new();
+      ReturnModel<SendSmsReturnDto> result = new();
 
       var createNewSmsResult = await _smsService.CreateSmsAsync(sendSmsInputDto);
       if(createNewSmsResult.HttpStatusCode is not HttpStatusCode.OK || createNewSmsResult.Data is null)
@@ -43,12 +43,12 @@ namespace SmsService.Services
       SmsModel newSms = createNewSmsResult.Data;
 
       (bool isSuccessFull, SendResult result ,string message) sendSms = await SendByKaveNegarAsync(newSms);
-
-     
+   
       if (sendSms.isSuccessFull)
       {
         await SucceedSms(newSms, sendSms.result);
-        result.CreateSuccessModel(data: newSms.Id.ToString());
+        SendSmsReturnDto sendSmsReturn = new(newSms.Id.ToString());
+        result.CreateSuccessModel(data: sendSmsReturn);
         return result;
       }     
       else

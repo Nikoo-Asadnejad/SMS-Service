@@ -2,7 +2,7 @@ using SmsService.Dtos.User;
 
 namespace SmsService.Entities
 {
-  public class UserModel
+  public class UserModel 
   {
     public UserModel(long id, string firstName, string lastName, string phoneNumber)
     {
