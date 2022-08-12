@@ -23,12 +23,12 @@ namespace SmsService.Services
     private readonly ISmsService _smsService;
     private KavenegarApi _kaveNegarApi;
     private readonly ILoggerService _loggerService;
-    public KaveNegarService(ISmsService smsService , IOptions<AppSetting> appSetting , Func<int, ILoggerService> loggerService)
+    public KaveNegarService(ISmsService smsService , IOptions<AppSetting> appSetting , Func<LoggerIds, ILoggerService> loggerService)
     {
       _smsService = smsService;
       _appSetting = appSetting.Value;
       _kaveNegarApi = new KavenegarApi(_appSetting.KaveNegar.ApiKey);
-      _loggerService = loggerService((int)LoggerIds.Sentry);
+      _loggerService = loggerService(LoggerIds.Sentry);
 
     }
 
@@ -51,7 +51,7 @@ namespace SmsService.Services
       {
         await SucceedSms(newSms, sendSms.result);
         SendSmsReturnDto sendSmsReturnModel = new(newSms.Id.ToString());
-        result.CreateSuccessModel(data: sendSmsReturnModel);
+        result.CreateSuccessModel(data: sendSmsReturnModel, title: "SMSId") ;
         return result;
       }     
       else
@@ -79,7 +79,7 @@ namespace SmsService.Services
       catch (ApiException ex)
       {
         //if the http response of web service is not 200 this exception will rise
-        await _sentryLogger.CaptureLogAsync(LogLevel.Error, ex);
+        await _loggerService.CaptureLogAsync(LogLevel.Error, ex);
           return (false, null , ex.Message);
 
       }

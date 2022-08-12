@@ -21,8 +21,8 @@ namespace SmsService.Services
 
       SmsModel smsModel = sendSmsInputDto.CreateSmsModel();
       await _smsRepository.InsertAsync(smsModel);
-     
-      result.CreateSuccessModel(data: smsModel);
+
+      result.CreateSuccessModel(data: smsModel, title : "SMS");
       return result;
     }
 
@@ -33,7 +33,7 @@ namespace SmsService.Services
       var smsModel =await _smsRepository.FindByIdAsync(id);
       SmsReturnDto getSmsResultDto = smsModel.CreateSmsReturnDto();
 
-      result.CreateSuccessModel(data: getSmsResultDto);
+      result.CreateSuccessModel(data: getSmsResultDto , title: "SMS");
       return result;
     }
 
