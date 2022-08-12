@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SmsService</name>
+    </assembly>
+    <members>
+        <member name="M:SmsService.Controllers.SmsController.SendSms(SmsService.Dtos.Sms.SmsInputDto)">
+            <summary>
+            Sends SMS by provider choosen by user 
+            </summary>
+            <param name="smsInputDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmsService.Controllers.SmsController.GetSms(System.String)">
+            <summary>
+            Gets SMS with given id
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -61,3 +61,7 @@ D:\web development\projects\SMS-Service\SmsService\SmsService\obj\Debug\net6.0\S
 D:\web development\projects\SMS-Service\SmsService\SmsService\obj\Debug\net6.0\SmsService.genruntimeconfig.cache
 D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\MongoDB.Driver.dll
 D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\Kavenegar.dll
+D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\SmsService.xml
+D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+D:\web development\projects\SMS-Service\SmsService\SmsService\bin\Debug\net6.0\System.IO.Packaging.dll
+D:\web development\projects\SMS-Service\SmsService\SmsService\obj\Debug\net6.0\SmsService.xml

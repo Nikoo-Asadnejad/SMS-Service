@@ -1,5 +1,7 @@
+using DocumentFormat.OpenXml.EMMA;
 using ErrorHandlingDll.Configurations;
 using HttpService.Configuration;
+using Microsoft.OpenApi.Models;
 using MongoRepository.Configurations;
 using SmsService.Interfaces;
 using SmsService.Services;
@@ -12,9 +14,13 @@ namespace SmsService.Configurations
     {
 
       services.AddControllers();
-      // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
       services.AddEndpointsApiExplorer();
-      services.AddSwaggerGen();
+
+      services.AddSwaggerGen(c =>
+      {
+        var filePath = Path.Combine(AppContext.BaseDirectory, "SMSService.xml");
+        c.IncludeXmlComments(filePath);
+      });
 
       services.Configure<AppSetting>(configuration);
 
@@ -29,18 +35,17 @@ namespace SmsService.Configurations
 
     public static void ConfigPipeLines(WebApplication app)
     {
-      
 
+    //  ErrorHandlingDllConfigurator.ConfigureAppPipeline(app);
       app.UseHttpsRedirection();
-      //ErrorHandlingDllConfigurator.ConfigureAppPipeline(app);
-      app.UseRouting(); 
+      app.UseRouting();   
       app.UseAuthorization();  
       app.UseEndpoints(endpoints => {
         endpoints.MapControllers();
       });
       app.MapControllers();
+      
 
-     
 
       if (app.Environment.IsDevelopment())
       {

@@ -6,7 +6,9 @@ namespace SmsService.Configurations.AppSettings
       public Logging Logging { get; set; }
       public Mongodb MongoDb { get; set; }
       public Kavenegar KaveNegar { get; set; }
+      public Sentry Sentry { get; set; }
       public string AllowedHosts { get; set; }
+
   
   }
 
@@ -15,6 +17,11 @@ namespace SmsService.Configurations.AppSettings
     public Loglevel LogLevel { get; set; }
   }
 
+  public class Sentry
+  {
+    public string Dsn { get; set; }
+
+  }
   public class Loglevel
   {
     public string Default { get; set; }

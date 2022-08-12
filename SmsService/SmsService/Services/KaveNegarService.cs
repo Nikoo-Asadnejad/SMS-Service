@@ -60,8 +60,7 @@ namespace SmsService.Services
         result.CreateServerErrorModel(message: $"{sendSms.message}");
         return result;
       }
-       
-     
+        
     }
 
     private async Task<(bool isSuccessFull , SendResult , string errorMessage)> SendByKaveNegarAsync(SmsModel sms)
