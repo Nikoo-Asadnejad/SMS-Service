@@ -1,3 +1,4 @@
+using ErrorHandlingDll.FixTypes.Enumarions;
 using ErrorHandlingDll.Interfaces;
 using ErrorHandlingDll.ReturnTypes;
 using Kavenegar;
@@ -11,6 +12,8 @@ using SmsService.Entities;
 using SmsService.Interfaces;
 using SmsService.Mappers;
 using System.Net;
+using ErrorHandlingDll.FixTypes.Enumarions;
+using LogLevel = ErrorHandlingDll.FixTypes.Enumarions.LogLevel;
 
 namespace SmsService.Services
 {
@@ -19,36 +22,36 @@ namespace SmsService.Services
     private readonly AppSetting _appSetting;
     private readonly ISmsService _smsService;
     private KavenegarApi _kaveNegarApi;
-
-   // private readonly ILoggerService _loggerService;
-    public KaveNegarService(ISmsService smsService , IOptions<AppSetting> appSetting )
+    private readonly ILoggerService _loggerService;
+    public KaveNegarService(ISmsService smsService , IOptions<AppSetting> appSetting , Func<int, ILoggerService> loggerService)
     {
       _smsService = smsService;
       _appSetting = appSetting.Value;
       _kaveNegarApi = new KavenegarApi(_appSetting.KaveNegar.ApiKey);
-     // _loggerService = loggerService;
+      _loggerService = loggerService((int)LoggerIds.Sentry);
+
     }
 
     public async Task<ReturnModel<SendSmsReturnDto>> SendSmsAsync(SmsInputDto sendSmsInputDto)
     {
       ReturnModel<SendSmsReturnDto> result = new();
 
-      var createNewSmsResult = await _smsService.CreateSmsAsync(sendSmsInputDto);
-      if(createNewSmsResult.HttpStatusCode is not HttpStatusCode.OK || createNewSmsResult.Data is null)
+      var createNewSms = await _smsService.CreateSmsAsync(sendSmsInputDto);
+      if(createNewSms.HttpStatusCode is not HttpStatusCode.OK || createNewSms.Data is null)
       {
         result.CreateServerErrorModel();
         return result;
       }
 
-      SmsModel newSms = createNewSmsResult.Data;
+      SmsModel newSms = createNewSms.Data;
 
       (bool isSuccessFull, SendResult result ,string message) sendSms = await SendByKaveNegarAsync(newSms);
    
       if (sendSms.isSuccessFull)
       {
         await SucceedSms(newSms, sendSms.result);
-        SendSmsReturnDto sendSmsReturn = new(newSms.Id.ToString());
-        result.CreateSuccessModel(data: sendSmsReturn);
+        SendSmsReturnDto sendSmsReturnModel = new(newSms.Id.ToString());
+        result.CreateSuccessModel(data: sendSmsReturnModel);
         return result;
       }     
       else
@@ -75,16 +78,17 @@ namespace SmsService.Services
       }
       catch (ApiException ex)
       {
-        // در صورتی که خروجی وب سرویس 200 نباشد این خطارخ می دهد.
+        //if the http response of web service is not 200 this exception will rise
+        await _sentryLogger.CaptureLogAsync(LogLevel.Error, ex);
           return (false, null , ex.Message);
+
       }
       catch (HttpException ex)
       {
-        // در زمانی که مشکلی در برقرای ارتباط با وب سرویس وجود داشته باشد این خطا رخ می دهد
+        //if the service is not reachable this exception will rise
         return (false, null, ex.Message);
       }
-    
-      
+         
     }
 
     private async Task FailSms(SmsModel sms ,string message)

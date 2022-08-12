@@ -39,10 +39,7 @@ namespace SmsService.Services
 
     public async Task<bool> UpdateSms(SmsModel sms ,UpdateSmsDto updateSmsDto)
     {
-      SmsModel updatedSmsModel = SmsMappers.UpdateSmsModel(sms,updateSmsDto);
-      UpdateDefinition<SmsModel> updateDefinition =  Builders<SmsModel>.Update.Set(s =>
-      s.IsSuccessfull, updatedSmsModel.IsSuccessfull);
-      
+      SmsModel updatedSmsModel = SmsMappers.UpdateSmsModel(sms,updateSmsDto);     
       await _smsRepository.ReplaceOneAsync(updatedSmsModel);
 
       return true;
