@@ -56,13 +56,14 @@ namespace SmsService.Services
       }     
       else
       {
-        await FailSms(newSms,sendSms.message);
+        await FailSms(newSms,sendSms.result);
         result.CreateServerErrorModel(message: $"{sendSms.message}");
         return result;
       }
         
     }
 
+   
     private async Task<(bool isSuccessFull , SendResult , string errorMessage)> SendByKaveNegarAsync(SmsModel sms)
     {
 
@@ -71,7 +72,7 @@ namespace SmsService.Services
       {
         SendResult sendSms =
        _kaveNegarApi.Send(_appSetting.KaveNegar.Sender,
-                         sms.Receiver.PhoneNumber,
+                         sms.Receievers.FirstOrDefault().PhoneNumber,
                          sms.Content);
         return (true, sendSms, sendSms.StatusText);
       }
@@ -90,19 +91,15 @@ namespace SmsService.Services
          
     }
 
-    private async Task FailSms(SmsModel sms ,string message)
+    private async Task FailSms(SmsModel sms , SendResult sendResult)
     {
-      UpdateSmsDto updateSmsModel = SmsMappers.CreateFailedUpdateModel(message);
+      UpdateSmsDto updateSmsModel = SmsMappers.CreateNotSentModel(sendResult);
       await _smsService.UpdateSms(sms,updateSmsModel);
     }
 
     private async Task SucceedSms(SmsModel sms, SendResult sendResult)
     {
-      UpdateSmsDto updateSmsModel = SmsMappers.CreateSuccessedUpdateModel(sendResult.Cost,
-        sendResult.Status,
-        sendResult.StatusText, sendResult.Messageid, sendResult.Message,
-        sendResult.Date, sendResult.GregorianDate);
-
+      UpdateSmsDto updateSmsModel = SmsMappers.CreateSentModel(sendResult);
       await _smsService.UpdateSms(sms, updateSmsModel);
     }
 

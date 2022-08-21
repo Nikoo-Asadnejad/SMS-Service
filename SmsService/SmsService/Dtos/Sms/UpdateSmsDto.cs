@@ -2,8 +2,9 @@ using SmsService.Entities;
 
 namespace SmsService.Dtos.Sms
 {
-  public record UpdateSmsDto(bool? isSuccessful ,
+  public record UpdateSmsDto(bool IsSent ,
                             int? Cost,
-                            SendingStatusModel SendingStatus ,
-                            ProviderResultModel ProviderResult );
+                            int? Status,
+                            string StatusMessage,
+                            long? messageId);
 }

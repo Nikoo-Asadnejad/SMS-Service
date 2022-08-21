@@ -2,6 +2,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoRepository.Atrributes;
 using MongoRepository.Models;
+using SmsService.Mappers;
 
 namespace SmsService.Entities
 {
@@ -9,22 +10,8 @@ namespace SmsService.Entities
   [MongoCollectionAttribute("Sms")]
   public class SmsModel : MongoDocument
   {
-    public SmsModel(string content, string type,int typeId, UserModel user, int providerId ,
-      string providerName , string senderPhoneNumber)
-    {
-      Content = content;
-      Type = type;
-      TypeId = typeId;
-      Receiver = user;
-      ProviderId = providerId;
-      ProviderName = providerName;
-      SenderPhoneNumber = senderPhoneNumber;
-    }
-
-    public SmsModel()
-    {
-
-    }
+    [BsonId]
+    public ObjectId Id { get; set; }
 
     [BsonRequired]
     public string Content { get; set; }
@@ -36,25 +23,48 @@ namespace SmsService.Entities
     public int TypeId { get; set; }
 
     [BsonRequired]
-    public UserModel Receiver { get; set; }
+    public List<UserModel> Receievers { get; set; }
+    public Provider Provider { get; set; }
 
-    [BsonRequired]
-    public int ProviderId { get; set; }
+    public bool IsSingle { get; set; }
 
-    [BsonRequired]
-    public string ProviderName { get; set; }
+    public bool IsSent { get; set; }
+    public long SendDate { get; set; }
+    public long SentDate { get; set; }
 
-    public bool? IsSuccessfull { get; set; }
-
-    public string SenderPhoneNumber { get; set; }
+    public bool IsDelivered { get; set; }
+    public long? DeliveryDate { get; set; }
 
     public int? Cost { get; set; }
 
-    public SendingStatusModel SendingStatus{get; set;}
+    public long? MessageId { get; set; }
+    public int? Status { get; set; }
+    public string StatusMessage { get; set; }
 
-    public ProviderResultModel ProviderResult { get; set; }
+    public SmsModel()
+    {
 
+    }
 
+    public SmsModel(string content, int typeId , List<UserModel> recievers , int providerId )
+    {
+      Content = content;
+      TypeId = typeId;
+      Type = BaseDataMappers.GetSmsTypeById(typeId);
+      Provider = new Provider(providerId,BaseDataMappers.GetProviderById(providerId),
+                              BaseDataMappers.GetSenderPhoneByProviderId(providerId));
+      Receievers = recievers;
+    }
+
+    public SmsModel(string content, int typeId, UserModel reciever, int providerId)
+    {
+      Content = content;
+      TypeId = typeId;
+      Type = BaseDataMappers.GetSmsTypeById(typeId);
+      Provider = new Provider(providerId, BaseDataMappers.GetProviderById(providerId),
+                              BaseDataMappers.GetSenderPhoneByProviderId(providerId));
+      Receievers = new List<UserModel>() { reciever };
+    }
   }
 
 

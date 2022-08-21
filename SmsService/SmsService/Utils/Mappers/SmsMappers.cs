@@ -1,3 +1,4 @@
+using Kavenegar.Models;
 using Microsoft.Extensions.Options;
 using SmsService.Dtos;
 using SmsService.Dtos.Provider;
@@ -9,34 +10,31 @@ namespace SmsService.Mappers;
 public static class SmsMappers
 {
   public static SmsModel CreateSmsModel(this SmsInputDto sendSmsInputDto)
-  => new SmsModel(sendSmsInputDto.Content, BaseDataMappers.GetSmsTypeById(sendSmsInputDto.TypeId),
-                  sendSmsInputDto.TypeId,
-                  sendSmsInputDto.User,sendSmsInputDto.ProviderId ,
-                  BaseDataMappers.GetProviderById(sendSmsInputDto.ProviderId),
-                  BaseDataMappers.GetSenderPhoneByProviderId(sendSmsInputDto.ProviderId));
+  => new SmsModel(sendSmsInputDto.Content,sendSmsInputDto.TypeId,sendSmsInputDto.User,sendSmsInputDto.ProviderId);
 
   public static SmsReturnDto CreateSmsReturnDto(this SmsModel smsModel)
     => new SmsReturnDto(smsModel.Id.ToString(), smsModel.Content,
-                            smsModel.Type, smsModel.Receiver.Id,
-                            smsModel.ProviderId);
+                            smsModel.Type, smsModel.Receievers.FirstOrDefault().Id,
+                            smsModel.Provider.Id);
 
   public static SmsModel UpdateSmsModel(SmsModel sms , UpdateSmsDto updateSmsDto)
   {
     sms.Cost = updateSmsDto.Cost;
-    sms.IsSuccessfull = updateSmsDto.isSuccessful;
-    sms.ProviderResult = updateSmsDto.ProviderResult;
-    sms.SendingStatus = updateSmsDto.SendingStatus;
-
+    sms.IsSent = updateSmsDto.IsSent;
+    sms.StatusMessage = updateSmsDto.StatusMessage;
+    sms.Status = updateSmsDto.Status;
+    sms.MessageId = updateSmsDto.messageId;
     return sms;
   }
 
   public static UpdateSmsDto CreateSuccessedUpdateModel(int cost, int sendingStatus,
-                                                string statusMessage, long messageId,
-                                                string message , long date , DateTime georgianDate)
-    => new UpdateSmsDto(true, cost, new SendingStatusModel(sendingStatus, statusMessage),
-                        new ProviderResultModel(messageId, message ,date, georgianDate));
+                                                string statusMessage, long messageId)
+    => new UpdateSmsDto(true, cost,sendingStatus,statusMessage,messageId);
 
-  public static UpdateSmsDto CreateFailedUpdateModel(string statusMessage)
-   => new UpdateSmsDto(false, null, new SendingStatusModel(0, statusMessage),null);
+  public static UpdateSmsDto CreateSentModel(SendResult sendResult)
+    => new UpdateSmsDto(true, sendResult.Cost, sendResult.Status, sendResult.StatusText, sendResult.Messageid);
+
+  public static UpdateSmsDto CreateNotSentModel(SendResult sendResult)
+   => new UpdateSmsDto(false, sendResult.Cost,sendResult.Status,sendResult.StatusText,sendResult.Messageid);
 }
 

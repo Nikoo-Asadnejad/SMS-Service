@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using SmsService.Entities;
 
 namespace SmsService.Dtos.User;
