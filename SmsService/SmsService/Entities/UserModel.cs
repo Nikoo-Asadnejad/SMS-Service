@@ -17,7 +17,6 @@ namespace SmsService.Entities
     public string PhoneNumber { get; set; }
     public List<SmsModel> Smses { get; set; }
 
-
     public UserModel(long id, string firstName, string lastName, string phoneNumber)
     {
       Id = id;

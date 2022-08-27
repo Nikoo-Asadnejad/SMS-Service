@@ -1,4 +1,5 @@
 using MongoDB.Bson.Serialization.Attributes;
+using SmsService.Mappers;
 
 namespace SmsService.Entities
 {
@@ -14,6 +15,17 @@ namespace SmsService.Entities
       Id = id;
       Name = name;
       Number = number;
+    }
+
+    public Provider(int id, string number)
+    {
+      Id =id;
+      Name = BaseDataMappers.GetProviderById(id);
+      Number = number;
+    }
+    public Provider()
+    {
+
     }
 
     

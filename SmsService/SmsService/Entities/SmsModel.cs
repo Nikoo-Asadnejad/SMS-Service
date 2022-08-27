@@ -23,7 +23,7 @@ namespace SmsService.Entities
     public int TypeId { get; set; }
 
     [BsonRequired]
-    public List<UserModel> Receievers { get; set; }
+    public UserModel Receiever { get; set; }
     public Provider Provider { get; set; }
 
     public bool IsSingle { get; set; }
@@ -45,17 +45,6 @@ namespace SmsService.Entities
     {
 
     }
-
-    public SmsModel(string content, int typeId , List<UserModel> recievers , int providerId )
-    {
-      Content = content;
-      TypeId = typeId;
-      Type = BaseDataMappers.GetSmsTypeById(typeId);
-      Provider = new Provider(providerId,BaseDataMappers.GetProviderById(providerId),
-                              BaseDataMappers.GetSenderPhoneByProviderId(providerId));
-      Receievers = recievers;
-    }
-
     public SmsModel(string content, int typeId, UserModel reciever, int providerId)
     {
       Content = content;
@@ -63,7 +52,7 @@ namespace SmsService.Entities
       Type = BaseDataMappers.GetSmsTypeById(typeId);
       Provider = new Provider(providerId, BaseDataMappers.GetProviderById(providerId),
                               BaseDataMappers.GetSenderPhoneByProviderId(providerId));
-      Receievers = new List<UserModel>() { reciever };
+      Receiever = reciever;
     }
   }
 

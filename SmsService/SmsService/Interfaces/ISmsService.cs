@@ -6,7 +6,7 @@ namespace SmsService.Interfaces
 {
   public interface ISmsService
   {
-    Task<ReturnModel<SmsModel>> CreateSmsAsync(SmsInputDto sendSmsInputDto);
+    Task<ReturnModel<SmsModel>> CreateSmsAsync(SmsModel sendSmsInputDto);
 
     Task<ReturnModel<SmsReturnDto>> GetSmsAsync(string id);
 

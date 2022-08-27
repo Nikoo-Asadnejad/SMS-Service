@@ -24,7 +24,7 @@ namespace SmsService.Controllers
     /// <param name="smsInputDto"></param>
     /// <returns></returns>
     [HttpPost]
-    [Route("api/v1/sms/send")]
+    [Route("api/v1/smses/send")]
     [ProducesResponseType(typeof(ReturnModel<SendSmsReturnDto>), 200)]
     [ProducesResponseType(typeof(ReturnModel<SendSmsReturnDto>), 400)]
     [ProducesResponseType(typeof(ReturnModel<SendSmsReturnDto>), 500)]
@@ -49,7 +49,7 @@ namespace SmsService.Controllers
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    [Route("api/v1/sms/{id}")]
+    [Route("api/v1/smses/{id}")]
     [ProducesResponseType(typeof(ReturnModel<SmsReturnDto>), 200)]
     [ProducesResponseType(typeof(ReturnModel<SmsReturnDto>), 400)]
     [ProducesResponseType(typeof(ReturnModel<SmsReturnDto>), 500)]

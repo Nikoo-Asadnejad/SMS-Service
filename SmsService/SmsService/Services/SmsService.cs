@@ -15,11 +15,9 @@ namespace SmsService.Services
     {
       _smsRepository = smsRepository;
     }
-    public async Task<ReturnModel<SmsModel>> CreateSmsAsync(SmsInputDto sendSmsInputDto )
+    public async Task<ReturnModel<SmsModel>> CreateSmsAsync(SmsModel smsModel )
     {
       ReturnModel<SmsModel> result = new();
-
-      SmsModel smsModel = sendSmsInputDto.CreateSmsModel();
       await _smsRepository.InsertAsync(smsModel);
 
       result.CreateSuccessModel(data: smsModel, title : "SMS");
