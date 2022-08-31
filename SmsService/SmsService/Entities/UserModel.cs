@@ -6,16 +6,13 @@ using SmsService.Dtos.User;
 
 namespace SmsService.Entities
 {
-  [MongoCollectionAttribute("User")]
-  public class UserModel : MongoDocument
+  public class UserModel 
   {
 
-    [BsonId]
     public long Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string PhoneNumber { get; set; }
-    public List<SmsModel> Smses { get; set; }
 
     public UserModel(long id, string firstName, string lastName, string phoneNumber)
     {

@@ -25,6 +25,11 @@ namespace SmsService.Percistance
 
     }
 
+    public struct KaveNegarLookupTemplates
+    {
+      public const string OPT = "OPT";
+    }
+
   }
 
 }

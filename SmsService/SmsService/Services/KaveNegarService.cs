@@ -33,11 +33,11 @@ namespace SmsService.Services
       _loggerService = loggerService(LoggerIds.Sentry);
 
     }
-
     public async Task<ReturnModel<SendSmsReturnDto>> SendSmsAsync(SmsInputDto sendSmsInputDto)
     {
       ReturnModel<SendSmsReturnDto> result = new();
-      SmsModel smsModel = sendSmsInputDto.CreateSmsModel();
+      SmsModel smsModel = new();
+      smsModel.CreateNewSmsModel(sendSmsInputDto);
 
       var createNewSms = await _smsService.CreateSmsAsync(smsModel);
       if(createNewSms.HttpStatusCode is not HttpStatusCode.OK || createNewSms.Data is null)
@@ -52,14 +52,14 @@ namespace SmsService.Services
    
       if (sendSms.isSuccessFull)
       {
-        await SucceedSms(newSms, sendSms.result);
+        await UpdateSmsStatus(newSms, sendSms.result, isSent:true);
         SendSmsReturnDto sendSmsReturnModel = new(newSms.Id.ToString());
         result.CreateSuccessModel(data: sendSmsReturnModel, title: "SMSId") ;
         return result;
       }     
       else
       {
-        await FailSms(newSms,sendSms.result);
+        await UpdateSmsStatus(newSms, sendSms.result, isSent: false);
         result.CreateServerErrorModel(message: $"{sendSms.message}");
         return result;
       }
@@ -68,7 +68,8 @@ namespace SmsService.Services
     public async Task<ReturnModel<SendSmsReturnDto>> SendLoginCode(LoginSmsInputDto loginSmsInputDto)
     {
       ReturnModel<SendSmsReturnDto> result = new();
-      SmsModel smsModel = loginSmsInputDto.CreateLoginSmsModel();
+      SmsModel smsModel = new();
+      smsModel.CreateLoginSmsModel(loginSmsInputDto);
 
       var createNewSms = await _smsService.CreateSmsAsync(smsModel);
       if (createNewSms.HttpStatusCode is not HttpStatusCode.OK || createNewSms.Data is null)
@@ -79,18 +80,18 @@ namespace SmsService.Services
 
       SmsModel newSms = createNewSms.Data;
 
-      (bool isSuccessFull, SendResult result, string message) sendSms = await SendLookUpByKaveNegar(newSms.Receiever.PhoneNumber,loginSmsInputDto.code, SmsMessagesTemplates.LoginSmsTemplate);
+      (bool isSuccessFull, SendResult result, string message) sendSms = await SendLookUpByKaveNegar(newSms.Receiever.PhoneNumber,loginSmsInputDto.code, loginSmsInputDto.appName);
 
       if (sendSms.isSuccessFull)
       {
-        await SucceedSms(newSms, sendSms.result);
+        await UpdateSmsStatus(newSms, sendSms.result, isSent: true);
         SendSmsReturnDto sendSmsReturnModel = new(newSms.Id.ToString());
         result.CreateSuccessModel(data: sendSmsReturnModel, title: "SMSId");
         return result;
       }
       else
       {
-        await FailSms(newSms, sendSms.result);
+        await UpdateSmsStatus(newSms, sendSms.result,isSent:false);
         result.CreateServerErrorModel(message: $"{sendSms.message}");
         return result;
       }
@@ -98,6 +99,9 @@ namespace SmsService.Services
     public async Task<StatusResult> CheckSmsDelivery(long messageId)
     {
       StatusResult status = _kaveNegarApi.Status(new List<string>() { messageId.ToString() })?.FirstOrDefault();
+      ReturnModel<SmsModel> sms = await _smsService.GetSmsByMessageIdAsync(messageId);
+
+      await UpdateDeliveryStatus(sms.Data ,status, true);
       return status;
 
     }
@@ -125,11 +129,11 @@ namespace SmsService.Services
         return (false, null, ex.Message);
       }      
     }
-    private async Task<(bool isSuccessFull, SendResult, string errorMessage)> SendLookUpByKaveNegar(string reciever, string token , string template)
+    private async Task<(bool isSuccessFull, SendResult, string errorMessage)> SendLookUpByKaveNegar(string reciever, string token,string token2)
     {
       try
       {
-        SendResult sendSms = _kaveNegarApi.VerifyLookup(reciever,token,template);
+        SendResult sendSms = _kaveNegarApi.VerifyLookup(reciever,token,token2:token2 ,null,KaveNegarLookupTemplates.OPT);
         return (true, sendSms, sendSms.StatusText);
       }
       catch (ApiException ex)
@@ -145,23 +149,16 @@ namespace SmsService.Services
         return (false, null, ex.Message);
       }
     }
-    private async Task FailSms(SmsModel sms , SendResult sendResult)
+    private async Task UpdateSmsStatus(SmsModel sms , SendResult sendResult, bool isSent)
     {
-      UpdateSmsDto updateSmsModel = SmsMappers.CreateNotSentModel(sendResult);
-      await _smsService.UpdateSms(sms,updateSmsModel);
+      SmsModel updatedSmsModel = sms.UpdateSmsStatus(sendResult,isSent: isSent);
+      await _smsService.UpdateSms(updatedSmsModel);
     }
-    private async Task SucceedSms(SmsModel sms, SendResult sendResult)
+    private async Task UpdateDeliveryStatus(SmsModel sms, StatusResult statusResult, bool isDelivered)
     {
-      UpdateSmsDto updateSmsModel = SmsMappers.CreateSentModel(sendResult);
-      await _smsService.UpdateSms(sms, updateSmsModel);
+      SmsModel updatedSmsModel = sms.UpdateSmsDeliveryStatus(statusResult, isDelivered);
+      await _smsService.UpdateSms(updatedSmsModel);
     }
-
-
-    //private async Task UpdateDeliveryStatus(SmsModel sms ,StatusResult statusResult)
-    //{
-    //  UpdateSmsDto updateSmsModel = SmsMappers.CreateSentModel(sendResult);
-    //  await _smsService.UpdateSms(sms, updateSmsModel);
-    //}
 
   }
 }

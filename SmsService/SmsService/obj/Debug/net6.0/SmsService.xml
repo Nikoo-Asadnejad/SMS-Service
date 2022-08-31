@@ -11,6 +11,13 @@
             <param name="smsInputDto"></param>
             <returns></returns>
         </member>
+        <member name="M:SmsService.Controllers.SmsController.SendOPTSms(SmsService.Dtos.Sms.LoginSmsInputDto)">
+            <summary>
+            Sends OPT SMS by provider choosen by user 
+            </summary>
+            <param name="smsInputDto"></param>
+            <returns></returns>
+        </member>
         <member name="M:SmsService.Controllers.SmsController.GetSms(System.String)">
             <summary>
             Gets SMS with given id

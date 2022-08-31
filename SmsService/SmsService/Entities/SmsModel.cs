@@ -10,8 +10,6 @@ namespace SmsService.Entities
   [MongoCollectionAttribute("Sms")]
   public class SmsModel : MongoDocument
   {
-    [BsonId]
-    public ObjectId Id { get; set; }
 
     [BsonRequired]
     public string Content { get; set; }
@@ -26,14 +24,10 @@ namespace SmsService.Entities
     public UserModel Receiever { get; set; }
     public Provider Provider { get; set; }
 
-    public bool IsSingle { get; set; }
-
     public bool IsSent { get; set; }
-    public long SendDate { get; set; }
     public long SentDate { get; set; }
 
     public bool IsDelivered { get; set; }
-    public long? DeliveryDate { get; set; }
 
     public int? Cost { get; set; }
 

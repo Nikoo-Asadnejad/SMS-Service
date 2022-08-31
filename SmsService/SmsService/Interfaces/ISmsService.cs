@@ -10,7 +10,9 @@ namespace SmsService.Interfaces
 
     Task<ReturnModel<SmsReturnDto>> GetSmsAsync(string id);
 
-    Task<bool> UpdateSms(SmsModel sms, UpdateSmsDto updateSmsDto);
+    Task<ReturnModel<SmsModel>> GetSmsByMessageIdAsync (long messageId);  
+
+    Task<bool> UpdateSms(SmsModel newSms);
 
   }
 }

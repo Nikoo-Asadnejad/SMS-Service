@@ -35,11 +35,22 @@ namespace SmsService.Services
       return result;
     }
 
-    public async Task<bool> UpdateSms(SmsModel sms ,UpdateSmsDto updateSmsDto)
+    public async Task<ReturnModel<SmsModel>> GetSmsByMessageIdAsync(long messageId)
     {
-      SmsModel updatedSmsModel = SmsMappers.UpdateSmsModel(sms,updateSmsDto);     
-      await _smsRepository.ReplaceOneAsync(updatedSmsModel);
+      ReturnModel<SmsModel> result = new();
+      SmsModel sms = await _smsRepository.FindAsync(s => s.MessageId == messageId);
+      if(sms is null)
+      {
+        result.CreateNotFoundModel();
+        return result;
+      }
 
+      result.CreateSuccessModel(data: sms);
+      return result;
+    }
+    public async Task<bool> UpdateSms(SmsModel newSms)
+    {  
+      await _smsRepository.ReplaceOneAsync(newSms);
       return true;
     }
 

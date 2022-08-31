@@ -45,6 +45,31 @@ namespace SmsService.Controllers
 
 
     /// <summary>
+    /// Sends OPT SMS by provider choosen by user 
+    /// </summary>
+    /// <param name="smsInputDto"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("api/v1/smses/send-opt")]
+    [ProducesResponseType(typeof(ReturnModel<SendSmsReturnDto>), 200)]
+    [ProducesResponseType(typeof(ReturnModel<SendSmsReturnDto>), 400)]
+    [ProducesResponseType(typeof(ReturnModel<SendSmsReturnDto>), 500)]
+    public async Task<IActionResult> SendOPTSms([FromBody] LoginSmsInputDto smsInputDto)
+    {
+
+      if (!ModelState.IsValid)
+      {
+        var errors = ModelState.GetModelErrors();
+        return StatusCode(400, new ReturnModel<SendSmsReturnDto>(title: null, data: null,
+          HttpStatusCode.BadRequest, message: ReturnMessage.InvalidInputDataErrorMessage,
+          fieldErrors: errors));
+      }
+
+      ReturnModel<SendSmsReturnDto> result = await _sendSmsService.SendLoginCode(smsInputDto);
+      return StatusCode((int)result.HttpStatusCode, result);
+    }
+
+    /// <summary>
     /// Gets SMS with given id
     /// </summary>
     /// <returns></returns>
