@@ -3,6 +3,7 @@ using ErrorHandlingDll.Configurations;
 using HttpService.Configuration;
 using Microsoft.OpenApi.Models;
 using MongoRepository.Configurations;
+using SmsService.DataAccess.Repository;
 using SmsService.Interfaces;
 using SmsService.Services;
 
@@ -30,6 +31,7 @@ namespace SmsService.Configurations
 
       services.AddScoped<ISmsService, SmsService.Services.SmsService>();
       services.AddScoped<ISendSmsService, KaveNegarService>();
+      services.AddScoped<IUnitOfWork, UnitOfWork>();
 
     }
 
