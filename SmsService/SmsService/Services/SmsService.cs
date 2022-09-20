@@ -1,6 +1,7 @@
 using ErrorHandlingDll.ReturnTypes;
 using MongoDB.Driver;
 using MongoRepository.Repository;
+using SmsService.DataAccess.Repository;
 using SmsService.Dtos.Sms;
 using SmsService.Entities;
 using SmsService.Interfaces;
@@ -11,9 +12,9 @@ namespace SmsService.Services
   public class SmsService : ISmsService
   {
     private readonly IMongoRepository<SmsModel> _smsRepository;
-    public SmsService(IMongoRepository<SmsModel> smsRepository)
+    public SmsService(IUnitOfWork unitOfWork)
     {
-      _smsRepository = smsRepository;
+      _smsRepository = unitOfWork.SmsRepository;
     }
     public async Task<ReturnModel<SmsModel>> CreateSmsAsync(SmsModel smsModel )
     {
